@@ -1,5 +1,5 @@
-import { combineReducers } from "redux"
-import { TOGGLE_THEME } from "./actions"
+import { combineReducers } from 'redux'
+import { TOGGLE_THEME } from './actions'
 
 const initialState = {
   isDarkMode: false,

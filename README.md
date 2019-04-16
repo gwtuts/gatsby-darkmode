@@ -1,7 +1,7 @@
 ---
 date: 2019-04-16
 title: Gatsby Dark-Mode
-thumbnail: ""
+thumbnail: "tbn.png"
 tags:
   - gatsby
   - redux
@@ -12,6 +12,16 @@ tags:
 # gatsby dark mode
 
 ## create a dynamic dark-mode theme in gatsby using redux, and styled components
+
+![thumbnail](tbn.png)
+
+<p align="center">
+  <a href="https://gatsby-darkmode.now.sh">Demo</a>
+  ·
+  <a href="https://github.com/gwtuts/gatsby-darkmode">GitHub Repo</a>
+</p>
+
+---
 
 ### Getting Starting
 
@@ -191,3 +201,5 @@ export default connect(mapStateToProps)(Layout)
 And there you have it!
 
 a fully functional dark-mode site using gatsby, redux, and styles-components
+
+<iframe src="https://codesandbox.io/embed/github/gwtuts/gatsby-darkmode/tree/master/?autoresize=1&fontsize=14&hidenavigation=1&view=preview" title="gatsby-darkmode" style="width:100%; height:500px; border:0; border-radius: 4px; overflow:hidden;" sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"></iframe>
