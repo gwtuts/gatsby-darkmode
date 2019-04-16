@@ -1,9 +1,18 @@
 {
-  "name": "gatsby-starter-default",
-  "private": true,
-  "description": "A simple starter to get up and developing quickly with Gatsby",
+  "name": "gatsby-darkmode",
+  "description": "A simple gatsby darkmode starter using redux / styled-components",
   "version": "0.1.0",
-  "author": "Kyle Mathews <mathews.kyle@gmail.com>",
+  "author": "Garrett Weems <gwgraphicdesign@gmail.com>",
+  "license": "MIT",
+  "tags": [
+    "gatsby",
+    "dark-mode",
+    "redux",
+    "styled-components"
+  ],
+  "eslintConfig": {
+    "extends": "react-app"
+  },
   "dependencies": {
     "gatsby": "^2.3.16",
     "gatsby-image": "^2.0.37",
@@ -16,7 +25,11 @@
     "prop-types": "^15.7.2",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
-    "react-helmet": "^5.2.0"
+    "react-helmet": "^5.2.0",
+    "react-redux": "^7.0.2",
+    "redux": "^4.0.1",
+    "redux-devtools-extension": "^2.13.8",
+    "styled-components": "^4.2.0"
   },
   "devDependencies": {
     "prettier": "^1.17.0"
@@ -24,20 +37,19 @@
   "keywords": [
     "gatsby"
   ],
-  "license": "MIT",
   "scripts": {
     "build": "gatsby build",
     "develop": "gatsby develop",
     "format": "prettier --write src/**/*.{js,jsx}",
     "start": "npm run develop",
     "serve": "gatsby serve",
-    "test": "echo \"Write tests! -> https://gatsby.dev/unit-testing\""
+    "now-build": "gatsby build"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/gatsbyjs/gatsby-starter-default"
+    "url": "https://github.com/gwtuts/gatsby-darkmode"
   },
   "bugs": {
-    "url": "https://github.com/gatsbyjs/gatsby/issues"
+    "url": "https://github.com/gwtuts/gatsby-darkmode/issues"
   }
 }

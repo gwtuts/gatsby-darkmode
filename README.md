@@ -1,97 +1,193 @@
-<!-- AUTO-GENERATED-CONTENT:START (STARTER) -->
-<p align="center">
-  <a href="https://www.gatsbyjs.org">
-    <img alt="Gatsby" src="https://www.gatsbyjs.org/monogram.svg" width="60" />
-  </a>
-</p>
-<h1 align="center">
-  Gatsby's default starter
-</h1>
+---
+date: 2019-04-16
+title: Gatsby Dark-Mode
+thumbnail: ""
+tags:
+  - gatsby
+  - redux
+  - styles-components
+  - react
+---
 
-Kick off your project with this default boilerplate. This starter ships with the main Gatsby configuration files you might need to get up and running blazing fast with the blazing fast app generator for React.
+# gatsby dark mode
 
-_Have another more specific idea? You may want to check out our vibrant collection of [official and community-created starters](https://www.gatsbyjs.org/docs/gatsby-starters/)._
+## create a dynamic dark-mode theme in gatsby using redux, and styled components
 
-## 🚀 Quick start
+### Getting Starting
 
-1.  **Create a Gatsby site.**
+In your Gatsby project run
 
-    Use the Gatsby CLI to create a new site, specifying the default starter.
+```
+npm install --save react-redux redux styled-components
+```
 
-    ```sh
-    # create a new Gatsby site using the default starter
-    gatsby new my-default-starter https://github.com/gatsbyjs/gatsby-starter-default
-    ```
+Or
 
-1.  **Start developing.**
+```
+yarn add redux react-redux styled-components
+```
 
-    Navigate into your new site’s directory and start it up.
+### Step 1.
 
-    ```sh
-    cd my-default-starter/
-    gatsby develop
-    ```
+Create a new folder in your src/ directory called _state_
+Within this folder create the following files
 
-1.  **Open the source code and start editing!**
+```
+src/
+└── state/
+    ├── reducers.js
+    ├── actions.js
+    └── ReduxWrapper.js
+```
 
-    Your site is now running at `http://localhost:8000`!
+Step 2.
+Create redux reducer
 
-    _Note: You'll also see a second link: _`http://localhost:8000/___graphql`_. This is a tool you can use to experiment with querying your data. Learn more about using this tool in the [Gatsby tutorial](https://www.gatsbyjs.org/tutorial/part-five/#introducing-graphiql)._
+```javascript
+// reducers.js
+import { combineReducers } from "redux"
+import { TOGGLE_THEME } from "./actions"
 
-    Open the `my-default-starter` directory in your code editor of choice and edit `src/pages/index.js`. Save your changes and the browser will update in real time!
+const initialState = {
+  isDarkMode: false,
+}
 
-## 🧐 What's inside?
+const theme = (state = initialState, action) => {
+  switch (action.type) {
+    case TOGGLE_THEME:
+      return {
+        ...state,
+        isDarkMode: !state.isDarkMode,
+      }
+    default:
+      return state
+  }
+}
 
-A quick look at the top-level files and directories you'll see in a Gatsby project.
+export default combineReducers({ theme })
+```
 
-    .
-    ├── node_modules
-    ├── src
-    ├── .gitignore
-    ├── .prettierrc
-    ├── gatsby-browser.js
-    ├── gatsby-config.js
-    ├── gatsby-node.js
-    ├── gatsby-ssr.js
-    ├── LICENSE
-    ├── package-lock.json
-    ├── package.json
-    └── README.md
+Step 3.
+create redux action to toggle current theme
 
-1.  **`/node_modules`**: This directory contains all of the modules of code that your project depends on (npm packages) are automatically installed.
+```javascript
+// actions.js
+export const TOGGLE_THEME = `TOGGLE_THEME`
+export const toggleTheme = () => ({ type: TOGGLE_THEME })
+```
 
-2.  **`/src`**: This directory will contain all of the code related to what you will see on the front-end of your site (what you see in the browser) such as your site header or a page template. `src` is a convention for “source code”.
+Step 4. Create our Provider / ReduxWrapper Component
+Now we are able to go ahead a create the ReduxWrapper component
 
-3.  **`.gitignore`**: This file tells git which files it should not track / not maintain a version history for.
+```javascript
+import { composeWithDevTools } from "redux-devtools-extension"
+import { Provider } from "react-redux"
+import { createStore } from "redux"
+import rootReducer from "./reducers"
+import React from "react"
 
-4.  **`.prettierrc`**: This is a configuration file for [Prettier](https://prettier.io/). Prettier is a tool to help keep the formatting of your code consistent.
+const store = createStore(rootReducer, composeWithDevTools())
 
-5.  **`gatsby-browser.js`**: This file is where Gatsby expects to find any usage of the [Gatsby browser APIs](https://www.gatsbyjs.org/docs/browser-apis/) (if any). These allow customization/extension of default Gatsby settings affecting the browser.
+export default ({ element }) => <Provider store={store}>{element}</Provider>
+```
 
-6.  **`gatsby-config.js`**: This is the main configuration file for a Gatsby site. This is where you can specify information about your site (metadata) like the site title and description, which Gatsby plugins you’d like to include, etc. (Check out the [config docs](https://www.gatsbyjs.org/docs/gatsby-config/) for more detail).
+composeWithDevTools() is optional but allows you to use the redux chrome extension that is very helpful for debugging
 
-7.  **`gatsby-node.js`**: This file is where Gatsby expects to find any usage of the [Gatsby Node APIs](https://www.gatsbyjs.org/docs/node-apis/) (if any). These allow customization/extension of default Gatsby settings affecting pieces of the site build process.
+now that we have our ReduxWrapper component created, open up the ~gatsby-browser.js~ and the ~gatsby-ssr.js~ and add the following to **both**
 
-8.  **`gatsby-ssr.js`**: This file is where Gatsby expects to find any usage of the [Gatsby server-side rendering APIs](https://www.gatsbyjs.org/docs/ssr-apis/) (if any). These allow customization of default Gatsby settings affecting server-side rendering.
+```javascript
+export { default as wrapRootElement } from "./src/state/ReduxWrapper"
+```
 
-9.  **`LICENSE`**: Gatsby is licensed under the MIT license.
+Step 5.
+Create our ToggleTheme button component
 
-10. **`package-lock.json`** (See `package.json` below, first). This is an automatically generated file based on the exact versions of your npm dependencies that were installed for your project. **(You won’t change this file directly).**
+in the src/components/ create a new file named **ToggleThemeButton.js**
 
-11. **`package.json`**: A manifest file for Node.js projects, which includes things like metadata (the project’s name, author, etc). This manifest is how npm knows which packages to install for your project.
+this is going to be a basic functional component that will allow us to connect to our state a trigger our reducer when we click the button
 
-12. **`README.md`**: A text file containing useful reference information about your project.
+```js
+// components/ToggleThemeButton.js
+import React from "react"
+import { connect } from "react-redux"
+import { toggleTheme } from "../state/actions"
 
-## 🎓 Learning Gatsby
+const ToggleThemeButton = ({ toggleTheme }) => (
+  <button type="button" onClick={toggleTheme}>
+    toggle
+  </button>
+)
 
-Looking for more guidance? Full documentation for Gatsby lives [on the website](https://www.gatsbyjs.org/). Here are some places to start:
+const mapDispatchToProps = {
+  toggleTheme,
+}
 
-- **For most developers, we recommend starting with our [in-depth tutorial for creating a site with Gatsby](https://www.gatsbyjs.org/tutorial/).** It starts with zero assumptions about your level of ability and walks through every step of the process.
+export default connect(
+  null,
+  mapDispatchToProps
+)(ToggleThemeButton)
+```
 
-- **To dive straight into code samples, head [to our documentation](https://www.gatsbyjs.org/docs/).** In particular, check out the _Guides_, _API Reference_, and _Advanced Tutorials_ sections in the sidebar.
+Step 6.
+making our redux state change our theme with styled-components
 
-## 💫 Deploy
+create a new file in your src/ directory called theme
 
-[![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/gatsbyjs/gatsby-starter-default)
+first start by creating an object of shared styles such as font, accent colors, font weight, anything you like.
 
-<!-- AUTO-GENERATED-CONTENT:END -->
+```js
+const sameStyles = { font: "Roboto", accent: "blue" }
+```
+
+now create your light and dark objects, they must have the same keys but different values for this for work
+
+```js
+export const light = { fg: "black", bg: "white", ...sameStyles }
+
+export const dark = { fg: "white", bg: "black", ...sameStyles }
+
+// we use the spread operator at the end of each object to add our same styles to each
+```
+
+now in the same file we are going to create our HOC component
+
+```js
+import { createGlobalStyle } from "styled-components"
+
+export const GlobalStyle = createGlobalStyle`
+html,body {
+  background:${props => props.theme.bg};
+  color:${props => props.theme.fg};
+}`
+```
+
+Step 7.
+connecting everything together!
+ok we're almost there
+open up layout.js component and import everything from our theme
+
+```js
+import { GlobalStyle, light, dark } from "../theme"
+import { ThemeProvider } from "styled-components"
+import { connect } from "react-redux"
+const Layout = ({ children, isDarkMode }) => (
+// ..
+)
+  render={data => (
+      <ThemeProvider theme={isDarkMode ? light : dark}>
+          <GlobalStyle />
+          // ...
+      </ThemeProvider>
+    )}
+
+
+const mapStateToProps = state => ({
+  isDarkMode: state.theme.isDarkMode,
+})
+
+export default connect(mapStateToProps)(Layout)
+```
+
+And there you have it!
+
+a fully functional dark-mode site using gatsby, redux, and styles-components
