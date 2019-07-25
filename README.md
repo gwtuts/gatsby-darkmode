@@ -1,4 +1,5 @@
 ---
+path: gatsby-darkmode
 date: 2019-04-16
 title: Gatsby Dark-Mode
 thumbnail: "tbn.png"
