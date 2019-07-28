@@ -203,4 +203,4 @@ And there you have it!
 
 a fully functional dark-mode site using gatsby, redux, and styles-components
 
-<iframe src="https://codesandbox.io/embed/github/gwtuts/gatsby-darkmode/tree/master/?autoresize=1&fontsize=14&hidenavigation=1&view=preview" title="gatsby-darkmode" style="width:100%; height:500px; border:0; border-radius: 4px; overflow:hidden;" sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"></iframe>
+[gatsby-darkmode-example](embedded-codesandbox://./)
